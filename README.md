@@ -273,10 +273,20 @@ $ travis encrypt --add deploy.secret_access_key
 
 You'll be prompted to paste your secret key. This will place the new encrypted key at the end of the .travis.yml file:
 
+```bash
   secret_access_key:
     secure: <key>
+```
 
 Make sure your Github repository and AWS environment names match your configuration.
+
+To validate your .travis.yml file, install Travis Lint:
+
+```bash
+$ sudo gem install travis-lint
+```
+
+Create an AWS S3 bucket and directories for deployment. This appears to fail silently if you forget to do it, so don't forget!
 
 ### Setting Up AWS Elastic Beanstalk on Local Development Environment
 
