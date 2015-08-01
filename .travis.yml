@@ -5,8 +5,9 @@ before_install: npm install -g grunt-cli
 install: cd app &&  npm install
 script: grunt test
 before_deploy: cd ..
+
 deploy:
-  matrix:
+  # Deploy master branch to production environment on merge (or push)
   - provider: elasticbeanstalk
     access_key_id: AKIAIKI74LODOS5L3GRQ
     secret_access_key:
@@ -20,6 +21,8 @@ deploy:
     on:
       repo: thehackerati/django-app-template
       branch: master
+
+  # Deploy staging branch to staging environment on merge (or push)
   - provider: elasticbeanstalk
     access_key_id: AKIAIKI74LODOS5L3GRQ
     secret_access_key:
@@ -33,3 +36,4 @@ deploy:
     on:
       repo: thehackerati/django-app-template
       branch: staging
+
