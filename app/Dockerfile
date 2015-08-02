@@ -6,3 +6,9 @@ ADD requirements.txt /opt/app/
 RUN pip install -r requirements.txt
 ADD . /opt/app/
 # python manage.py migrate
+# python manage.py collectstatic
+
+# RUN groupadd django
+RUN useradd -ms /bin/bash django
+
+CMD ["uwsgi", "--ini", "uwsgi.ini"]
