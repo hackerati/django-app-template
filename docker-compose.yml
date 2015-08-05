@@ -1,17 +1,21 @@
-# Start the node.js application server for local development.
+db:
+  image: postgres
+
 appsvr:
   build: ./app
-  dockerfile: "Dockerfile.dev"
+  # dockerfile: "Dockerfile.dev"
   volumes:
-    - "app:/src/app"
-  expose:
-    - "3000"
+    - app:/opt/app
+  ports:
+    - "8001:8001"
+  links:
+    - db
 
 nginx:
   restart: always
   build: ./nginx
   ports:
-    - "80:8080"
+    - "8000:8000"
   volumes:
     - /www/public
   volumes_from:

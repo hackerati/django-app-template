@@ -2,7 +2,7 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "name": "node-app-template",
+      "name": "django-app-template",
       "host": {
         "sourcePath": "/var/app/current/app"
       }
@@ -11,26 +11,26 @@
   "containerDefinitions": [
     {
       "name": "appsvr",
-      "image": "thehackerati/node-app-template",
+      "image": "thehackerati/django-app-template",
       "essential": true,
       "memory": 128,
       "mountPoints": [
         {
-          "sourceVolume": "node-app-template",
+          "sourceVolume": "django-app-template",
           "containerPath": "/var/opt/app",
           "readOnly": true
         }
       ]
     },
     {
-      "name": "nginx-proxy",
-      "image": "thehackerati/nginx-reverse-proxy",
+      "name": "nginx",
+      "image": "thehackerati/django-app-template-nginx",
       "essential": true,
       "memory": 128,
       "portMappings": [
         {
           "hostPort": 80,
-          "containerPort": 8080
+          "containerPort": 8000
         }
       ],
       "links": [
