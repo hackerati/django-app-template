@@ -15,7 +15,7 @@ before_script:
   - "pep8 --exclude=migrations --ignore=E501,E225 ."
   - pyflakes .
 script:
-  - python setup.py test
+  - python manage.py test
 
 before_deploy: cd ..
 
