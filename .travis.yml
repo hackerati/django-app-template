@@ -12,8 +12,8 @@ install:
   - pip install pep8 --use-mirrors
   - pip2 install pyflakes
 before_script:
-  - "pep8 --exclude=migrations --ignore=E501,E225 src"
-  - pyflakes -x W src
+  - "pep8 --exclude=migrations --ignore=E501,E225 ."
+  - pyflakes -x W .
 script:
   - python setup.py test
 
