@@ -13,7 +13,7 @@ install:
   - pip2 install pyflakes
 before_script:
   - "pep8 --exclude=migrations --ignore=E501,E225 ."
-  - pyflakes -x W .
+  - pyflakes .
 script:
   - python setup.py test
 
