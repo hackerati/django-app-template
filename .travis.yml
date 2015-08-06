@@ -9,6 +9,7 @@ env:
 install:
   - cd app
   - pip install -q Django==$DJANGO --use-mirrors
+  - pip install -r requirements.txt
   - pip install pep8 --use-mirrors
   - pip2 install pyflakes
 before_script:
