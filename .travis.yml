@@ -2,7 +2,6 @@ language: python
 services:
   - postgresql
 python:
-  - "2.6"
   - "2.7"
 env:
   - DJANGO=1.4
@@ -11,8 +10,8 @@ addons:
 install:
   - cd app
   - pip install -r requirements.txt
-  - pip install pep8 --use-mirrors
-  - pip2 install pyflakes
+  # - pip install pep8 --use-mirrors
+  # - pip2 install pyflakes
 before_script:
   - psql -c 'create database db;' -U postgres
   - python manage.py migrate --noinput
