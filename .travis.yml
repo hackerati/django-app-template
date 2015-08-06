@@ -18,8 +18,8 @@ before_script:
   - python manage.py migrate --noinput
   - python manage.py collectstatic --noinput
 script:
-  - "pep8 --exclude=migrations --ignore=E501,E225 ."
-  - pyflakes .
+  # - "pep8 --exclude=migrations --ignore=E501,E225 ."
+  # - pyflakes .
   - python manage.py test
 
 before_deploy: cd ..
