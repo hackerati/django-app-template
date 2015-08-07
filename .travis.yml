@@ -9,7 +9,7 @@ install:
   - cd app
   - pip install -r requirements.txt
 before_script:
-  - psql -c 'create database db;' -U postgres
+  - psql -c 'create database travisci;' -U postgres
   - python manage.py migrate --noinput
   - python manage.py collectstatic --noinput
 script:
