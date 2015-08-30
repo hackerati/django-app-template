@@ -38,7 +38,7 @@
       ],
       "mountPoints": [
         {
-          "sourceVolume": "awseb-logs-nginx-proxy",
+          "sourceVolume": "awseb-logs-nginx",
           "containerPath": "/var/log/nginx"
         }
       ]
