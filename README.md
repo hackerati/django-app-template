@@ -240,7 +240,7 @@ $ git push -u origin staging
 
 You'll need to setup your own continous integration service. This repo comes with [TravisCI](http://www.travis-ci.org) already configured. Once you've pushed your code to Github, login into Travis and connect it to your repo. By default, your first build will happen the next time that you push this repo to Github.
 
-Install Travis CLI
+#### Install Travis CLI
 
 Make sure you have at least Ruby 1.9.3 (2.0.0 recommended) installed.
 
@@ -259,7 +259,7 @@ $ travis version
 1.8.0
 ```
 
-Enter your AWS Access Key ID and Secret Access Key:
+#### Enter your AWS Access Key ID and Secret Access Key:
 
 You can find your AWS keys here: https://console.aws.amazon.com/iam/home?#security_credential
 
