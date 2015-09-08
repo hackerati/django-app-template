@@ -3,6 +3,7 @@ db:
 
 appsvr:
   build: ./app
+  dockerfile: "Dockerfile.dev"
   volumes:
     - ./app:/opt/app
   ports:
