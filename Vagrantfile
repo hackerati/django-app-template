@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
     config.vm.box = "ubuntu/trusty64"
 
     config.vm.network "private_network", ip: "192.168.59.103"
-    config.vm.synced_folder ".", "/src", type: "nfs"
+    config.vm.synced_folder ".", "/src"
 
     # Enable ssh forward agent
     config.ssh.forward_agent = true
@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     config.vm.provision :shell, inline: "apt-get update"
 
     # Install Ruby dev, which gem needs
-    config.vm.provision :shell, inline: "apt-get install ruby-dev"
+    config.vm.provision :shell, inline: "apt-get install -y ruby-dev"
 
     # Install travis CLI
     config.vm.provision :shell, inline: "gem install travis -v 1.8.0 --no-rdoc --no-ri"
