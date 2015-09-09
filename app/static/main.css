@@ -1,0 +1,11 @@
+a {
+    color: #F67C1C;
+}
+
+.container {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 30px;
+    margin: 60px auto 0;
+    max-width: 500px;
+    background-color: #E4E5E6;
+}
