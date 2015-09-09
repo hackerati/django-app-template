@@ -1,6 +1,6 @@
 # Dockerfile to build django-app-template container image for development.
 
-# For now, identical to the production container.
+# Placeholder for now.
 FROM python:2.7
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /opt/app
