@@ -19,4 +19,4 @@ nginx:
   volumes_from:
     - appsvr
   links:
-    - appsvr:appsvr
+    - appsvr
