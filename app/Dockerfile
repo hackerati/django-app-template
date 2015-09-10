@@ -8,7 +8,11 @@ ADD . /opt/app/
 # python manage.py migrate
 # python manage.py collectstatic
 
-# RUN groupadd django
+# Create run/ directory inside /opt/app/ for uwsgi to communicate via socket.
+RUN test -d /opt/app/run/ || mkdir -p /opt/app/run/
+
+# Ensure we have django user which owns /opt/app/ directory.
 RUN useradd -ms /bin/bash django
+RUN chown -R django:django /opt/app/
 
 CMD ["uwsgi", "--ini", "uwsgi.ini"]
