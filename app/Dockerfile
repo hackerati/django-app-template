@@ -2,9 +2,12 @@ FROM python:2.7
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /opt/app
 WORKDIR /opt/app
+
+# XXX Do this at run time
 ADD requirements.txt /opt/app/
 RUN pip install -r requirements.txt
-ADD . /opt/app/
+
+# XXX Do this at deploy time
 # python manage.py migrate
 # python manage.py collectstatic
 

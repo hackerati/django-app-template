@@ -17,7 +17,7 @@
       "mountPoints": [
         {
           "sourceVolume": "django-app-template",
-          "containerPath": "/var/opt/app",
+          "containerPath": "/opt/app",
           "readOnly": true
         }
       ]
