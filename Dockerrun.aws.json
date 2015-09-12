@@ -2,7 +2,7 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "name": "django-app-template",
+      "name": "app-root",
       "host": {
         "sourcePath": "/var/app/staging/app"
       }
@@ -16,7 +16,7 @@
       "memory": 128,
       "mountPoints": [
         {
-          "sourceVolume": "django-app-template",
+          "sourceVolume": "app-root",
           "containerPath": "/opt/app",
           "readOnly": true
         }
