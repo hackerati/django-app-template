@@ -4,7 +4,7 @@
     {
       "name": "django-app-template",
       "host": {
-        "sourcePath": "/var/app/current/app"
+        "sourcePath": "/var/app/staging/app"
       }
     }
   ],
