@@ -17,7 +17,7 @@
     },
     {
       "name": "appsvr",
-      "image": "thomaswhyyou/django-app-template-app",
+      "image": "thehackerati/django-app-template",
       "essential": true,
       "memory": 128,
       "mountPoints": [
@@ -32,7 +32,7 @@
     },
     {
       "name": "nginx",
-      "image": "thomaswhyyou/django-app-template-nginx",
+      "image": "thehackerati/django-app-template-nginx",
       "essential": true,
       "memory": 128,
       "portMappings": [
