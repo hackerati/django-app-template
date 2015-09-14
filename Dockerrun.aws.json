@@ -4,27 +4,35 @@
     {
       "name": "app-root",
       "host": {
-        "sourcePath": "/var/app/staging/app"
+        "sourcePath": "/var/app/current/app/"
       }
     }
   ],
   "containerDefinitions": [
     {
+      "name": "db",
+      "image": "postgres",
+      "essential": true,
+      "memory": 128
+    },
+    {
       "name": "appsvr",
-      "image": "thehackerati/django-app-template",
+      "image": "thomaswhyyou/django-app-template-app",
       "essential": true,
       "memory": 128,
       "mountPoints": [
         {
           "sourceVolume": "app-root",
-          "containerPath": "/opt/app",
-          "readOnly": true
+          "containerPath": "/src/app/"
         }
+      ],
+      "links": [
+        "db"
       ]
     },
     {
       "name": "nginx",
-      "image": "thehackerati/django-app-template-nginx",
+      "image": "thomaswhyyou/django-app-template-nginx",
       "essential": true,
       "memory": 128,
       "portMappings": [
@@ -33,14 +41,14 @@
           "containerPort": 8000
         }
       ],
-      "links": [
-        "appsvr"
-      ],
       "mountPoints": [
         {
-          "sourceVolume": "awseb-logs-nginx",
-          "containerPath": "/var/log/nginx"
+          "sourceVolume": "app-root",
+          "containerPath": "/src/app/"
         }
+      ],
+      "links": [
+        "appsvr"
       ]
     }
   ]
