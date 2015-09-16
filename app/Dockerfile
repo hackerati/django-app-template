@@ -1,21 +1,12 @@
 FROM python:2.7
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /opt/app
-WORKDIR /opt/app
 
-# XXX Do this at run time
-ADD requirements.txt /opt/app/
-RUN pip install -r requirements.txt
+# Install Python dependencies
+RUN mkdir -p /src/app/
+COPY requirements.txt /src/app/
+RUN pip install -r /src/app/requirements.txt
 
-# XXX Do this at deploy time
-# python manage.py migrate
-# python manage.py collectstatic
-
-# Create run/ directory inside /opt/app/ for uwsgi to communicate via socket.
-RUN test -d /opt/app/run/ || mkdir -p /opt/app/run/
-
-# Ensure we have django user which owns /opt/app/ directory.
+# Ensure we have django user with which uwsgi will run.
 RUN useradd -ms /bin/bash django
-RUN chown -R django:django /opt/app/
 
-CMD ["uwsgi", "--ini", "uwsgi.ini"]
+CMD uwsgi --ini /src/app/uwsgi.ini
