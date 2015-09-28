@@ -1,0 +1,13 @@
+# Dockerfile to build django-app-template container image for development.
+
+# Placeholder for now.
+FROM python:2.7
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /opt/app
+WORKDIR /opt/app
+ADD requirements.txt /opt/app/
+RUN pip install -r requirements.txt
+ADD . /opt/app/
+RUN useradd -ms /bin/bash django
+
+CMD ["uwsgi", "--ini", "uwsgi.ini"]

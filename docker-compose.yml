@@ -5,9 +5,7 @@ appsvr:
   build: ./app
   # dockerfile: "Dockerfile.dev"
   volumes:
-    - app:/opt/app
-  ports:
-    - "8001:8001"
+    - ./app:/src/app/
   links:
     - db
 
@@ -17,8 +15,6 @@ nginx:
   ports:
     - "8000:8000"
   volumes:
-    - /www/public
-  volumes_from:
-    - appsvr
+    - ./app:/src/app/
   links:
-    - appsvr:appsvr
+    - appsvr

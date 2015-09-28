@@ -35,7 +35,7 @@ You'll be prompted to login using an account with admin privileges on your host 
 Once the VM is started, check out the app:
 
 ```bash
-$ open http://192.168.59.103
+$ open http://192.168.59.103:8000
 ```
 
 If you are getting an error, give it a minute but you may need to run
@@ -107,7 +107,7 @@ $ docker-compose up
 You might additionally see the following error message:
 
 ```bash
-Conflict. The name "nodeapptemplate_nginx_1" is already in use by container <container>. You have to delete (or rename) that container to be able to reuse that name.
+Conflict. The name "djangoapptemplate_nginx_1" is already in use by container <container>. You have to delete (or rename) that container to be able to reuse that name.
 ```
 
 If that is the case, stop and remove all containers and restart:
@@ -126,7 +126,7 @@ $ curl http://127.0.0.1:80 #on linux
 ```
 
 If you use a firefox to check out the app, make sure you have 'use system proxy settings' checked off in Connection Settings, which can be found under the Network Tab in Advanced Preferences
- 
+
 Note that docker containers run directly on their Linux host machines, not in a virtual guest machine, so you can access any exposed ports on the loopback address: 127.0.0.1.
 
 ## What's Inside
@@ -138,7 +138,7 @@ As a starting point, this repo only includes some very basic components:
 - LICENSE: It's MIT licensed!
 - README.md: this file
 - Vagrantfile: configures a VM that runs docker-compose on boot
-- app: Docker container based on the official node image, along with the node/express app scaffolding
+- app: Docker container based on the official python image with scaffolded Django app
 - docker-compose.yml: runs the configured Docker containers
 - nginx: Docker container for the official nginx image, configured as a reverse proxy for the app
 
@@ -148,7 +148,7 @@ Note: Docker uses volumes to mount host directories in containers; so you can ke
 
 This makes installing application dependencies at build time (e.g. running npm install, pip or whatever package manager you use) a little tricky. They key is to install dependencies in a separate directory from your volume mount point, so they don't get overwritten when the container boots. You can then either modify your application to look for dependencies wherever you installed them, or you can copy the dependencies to your mounted volume before starting your application. Note that any changes to your mounted volume will be reflected in your host directory, which isn't desirable. Neither is having a non-standard deployment directory structure. TODO: decide on the best approach.
 
-Here, ./app/Dockerfile installs dependencies in /opt/app in the container at build time. At boot time, docker-compose.yml mounts the ./app directory in the host (project root) on the /src/app volume in the appsvr container and then runs /src/app/start.sh in the container, which copies the node_modules directory from /opt/app to /src/app. In doing so, ./app/node_modules will also be created in the host.
+Here, ./app/Dockerfile installs dependencies in /opt/app in the container at build time. At boot time, docker-compose.yml mounts the ./app directory in the host (project root) on the /src/app volume in the appsvr container to run.
 
 ## Working in the Environment
 
@@ -195,14 +195,14 @@ $ vagrant ssh -c 'docker ps'
 To tail the log files from your containers:
 
 ```bash
-$ vagrant ssh -c 'docker logs -f nodeapptemplate_appsvr_1'
-$ vagrant ssh -c 'docker logs -f nodeapptemplate_nginx_1'
+$ vagrant ssh -c 'docker logs -f djangoapptemplate_appsvr_1'
+$ vagrant ssh -c 'docker logs -f djangoapptemplate_nginx_1'
 ```
 
 To open a shell in your Docker container
 
 ```bash
-$ vagrant ssh -c 'docker exec -i -t nodeapptemplate_appsvr_1 bash'
+$ vagrant ssh -c 'docker exec -i -t djangoapptemplate_appsvr_1 bash'
 ```
 
 To rebuild a container after changing a Dockerfile:
@@ -327,7 +327,7 @@ lots of output...
 Test the production environment:
 
 ```bash
-$ curl http://djangoAppTemplateProd.elasticbeanstalk.com 
+$ curl http://djangoAppTemplateProd.elasticbeanstalk.com
 ```
 
 ### Setting Up AWS Staging Environment
@@ -344,7 +344,7 @@ lots of output...
 Test the staging environment:
 
 ```bash
-$ curl http://djangoAppTemplateStg.elasticbeanstalk.com 
+$ curl http://djangoAppTemplateStg.elasticbeanstalk.com
 ```
 
 ### Setting Up Automated Build and Deploy to AWS Elastic Beanstalk
@@ -357,6 +357,9 @@ Select your repository on Github
 Type        Name        Dockerfile Location     Tag Name
 Branch      staging     /app                    staging-latest
 Branch      master      /app                    latest
+
+TODO:
+get staging to pull staging docker build
 
 ## License
 Copyright (c) 2015 The Hackerati. This software is licensed under the MIT License.

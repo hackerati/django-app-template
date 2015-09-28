@@ -1,14 +1,12 @@
 FROM python:2.7
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /opt/app
-WORKDIR /opt/app
-ADD requirements.txt /opt/app/
-RUN pip install -r requirements.txt
-ADD . /opt/app/
-# python manage.py migrate
-# python manage.py collectstatic
 
-# RUN groupadd django
+# Install Python dependencies
+RUN mkdir -p /src/app/
+COPY requirements.txt /src/app/
+RUN pip install -r /src/app/requirements.txt
+
+# Ensure we have django user with which uwsgi will run.
 RUN useradd -ms /bin/bash django
 
-CMD ["uwsgi", "--ini", "uwsgi.ini"]
+CMD uwsgi --ini /src/app/uwsgi.ini
