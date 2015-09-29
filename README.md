@@ -360,6 +360,8 @@ Branch      master      /app                    latest
 
 TODO:
 get staging to pull staging docker build
+decouple builds from code pushing - separate process
+test current deploy process
 
 ## License
 Copyright (c) 2015 The Hackerati. This software is licensed under the MIT License.
