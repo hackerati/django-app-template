@@ -3,7 +3,7 @@ db:
 
 appsvr:
   build: ./app
-  # dockerfile: "Dockerfile.dev"
+  dockerfile: "Dockerfile.dev"
   volumes:
     - ./app:/src/app/
   links:

@@ -10,12 +10,6 @@
   ],
   "containerDefinitions": [
     {
-      "name": "db",
-      "image": "postgres",
-      "essential": true,
-      "memory": 128
-    },
-    {
       "name": "appsvr",
       "image": "thehackerati/django-app-template",
       "essential": true,
@@ -25,9 +19,6 @@
           "sourceVolume": "app-root",
           "containerPath": "/src/app/"
         }
-      ],
-      "links": [
-        "db"
       ]
     },
     {
