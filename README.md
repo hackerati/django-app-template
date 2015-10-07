@@ -333,21 +333,46 @@ $ curl http://djangoAppTemplateProd.elasticbeanstalk.com
 ### Setting Up AWS Staging Environment
 
 ```bash
-eb clone                    │
+$ eb clone
 Enter name for Environment Clone
 (default is my-cloned-env): djangoAppTemplateStg
 Enter DNS CNAME prefix
 (default is djangoAppTemplateStg):
 lots of output...
 ```
-
-Test the staging environment:
+#### Test the staging environment:
 
 ```bash
 $ curl http://djangoAppTemplateStg.elasticbeanstalk.com
 ```
 
 ### Setting Up Automated Build and Deploy to AWS Elastic Beanstalk
+#### Configure Elastic Beanstalk
+You will need a staging and production environment, as well as an RDS instance which these environements will connect to.
+
+The Django code provided will connect to a database automatically so long as the appropriate environment variables are set, and the security group rules allow such connections.
+The environment variables can be set on the Elastic Beanstalk console for each environment by going to Configuration > Software Configuration.
+In here you must set the following environment variables:
+RDS_DB_NAME, RDS_USERNAME, RDS_PASSWORD, RDS_HOSTNAME, RDS_PORT
+
+Be sure to use a different RDS_DB_NAME for staging and production.
+
+### Working within your environment
+#### Migrating the database
+In order to create migrations on your development environment you will need to run:
+```bash
+$ docker-compose run appsvr python /src/app/manage.py makemigrations
+```
+
+You must do this while the environment is running.
+Then you can run:
+```bash
+docker-compose run appsvr python /src/app/manage.py migrate
+```
+This will apply the migrations to the database.
+When you are ready to deploy, you must be sure to check your migrations into your repository.
+When you push your branch to staging the migrations will automatically be applied to your database.
+Your local database will likewise apply any new migrations each time you start docker-compose.
 
 Configure DockerHub to build staging and production repositories:
 

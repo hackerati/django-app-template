@@ -7,9 +7,9 @@ appsvr:
     - ./app:/src/app/
   links:
     - db
-  command: "python /src/app/manage.py syncdb"
-  command: "python /src/app/manage.py migrate"
-  command: "uwsgi --ini /src/app/uwsgi.ini"
+  environment:
+    - DEBUG=True
+  command: bash -c "python /src/app/manage.py migrate && uwsgi --ini /src/app/uwsgi.ini"
 
 nginx:
   restart: always
