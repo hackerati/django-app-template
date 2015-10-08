@@ -3,11 +3,14 @@ db:
 
 appsvr:
   build: ./app
-  # dockerfile: "Dockerfile.dev"
   volumes:
     - ./app:/src/app/
   links:
     - db
+  environment:
+    - DEBUG=True
+    - SECRET_KEY=B6LyzKZ$"D64&,CawS0_F<o'8"ixxglSE91|@?opd}/J\/dTodBQUVUkq-H*<?AXWI_.EYo18q05H:]+i'^NvXJL:(*YL$TqKE!l
+  command: bash -c "python /src/app/manage.py migrate && uwsgi --ini /src/app/uwsgi.ini"
 
 nginx:
   restart: always
