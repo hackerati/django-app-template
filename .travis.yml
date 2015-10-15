@@ -2,7 +2,7 @@ language: python
 services:
   - postgresql
 python:
-  - '2.7'
+  - '3.4'
 addons:
   postgresql: "9.3"
 install:
