@@ -21,10 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST')]
 
 
 # Application definition
@@ -136,33 +133,46 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 #######################################################################
-# SETTINGS FOR STATIC FILE STORAGE
-
-from storages.backends.s3boto import S3BotoStorage
+# SETTINGS FOR STATIC AND MEDIA FILE STORAGE
 
 # Headers can be set here which will be used when AWS serves
 # your static files.
-# AWS_HEADERS = {}
+AWS_HEADERS = {}
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
 AWS_S3_CUSTOM_DOMAIN = '{0}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 
 STATICFILES_LOCATION = os.environ.get('STATICFILES_LOCATION')
-STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-#######################################################################
-# SETTINGS FOR MEDIA FILE STORAGE
-
 MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
-MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+
+#######################################################################
+# CREATE CLASSES FOR STATIC AND MEDIAFILE STORAGE
+
+
+from storages.backends.s3boto import S3BotoStorage
 
 
 class StaticStorage(S3BotoStorage):
-    location = STATICFILES_LOCATION
+    def __init__(self, *args, **kwargs):
+        super(StaticStorage, self).__init__(*args, **kwargs)
+        self.location = STATICFILES_LOCATION
 
 
 class MediaStorage(S3BotoStorage):
-    location = MEDIAFILES_LOCATION
+    def __init__(self, *args, **kwargs):
+        super(MediaStorage, self).__init__(*args, **kwargs)
+        self.location = MEDIAFILES_LOCATION
 
 
-STATICFILES_STORAGE = 'app.settings.StaticStorage'
-DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
+# SECURITY WARNING: don't run with debug turned on in production!
+ENVIRONMENT = os.environ.get('ENVIRONMENT')
+if ENVIRONMENT == 'development'
+    STATIC_URL = '/static/'
+    DEBUG = True 
+else:
+    STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+    MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+    STATICFILES_STORAGE = 'app.settings.StaticStorage'
+    DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
 #######################################################################
