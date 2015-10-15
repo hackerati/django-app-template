@@ -167,7 +167,7 @@ class MediaStorage(S3BotoStorage):
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ENVIRONMENT = os.environ.get('ENVIRONMENT')
-if ENVIRONMENT == 'development'
+if ENVIRONMENT == 'development':
     STATIC_URL = '/static/'
     DEBUG = True 
 else:
