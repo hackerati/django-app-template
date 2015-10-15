@@ -167,9 +167,9 @@ class MediaStorage(S3BotoStorage):
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ENVIRONMENT = os.environ.get('ENVIRONMENT')
+DEBUG = True 
 if ENVIRONMENT == 'development':
     STATIC_URL = '/static/'
-    DEBUG = True 
 else:
     STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
     MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
