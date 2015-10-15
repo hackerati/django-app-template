@@ -351,9 +351,13 @@ $ curl http://djangoAppTemplateStg.elasticbeanstalk.com
 You will need a staging and production environment, as well as an RDS instance which these environements will connect to.
 
 The Django code provided will connect to a database automatically so long as the appropriate environment variables are set, and the security group rules allow such connections.
+In addition to database-related environment variables, you should also generate long and random SECRET_KEY variables,
+one for your staging environment, and one for production, and set these here.
 The environment variables can be set on the Elastic Beanstalk console for each environment by going to Configuration > Software Configuration.
 In here you must set the following environment variables:
-RDS_DB_NAME, RDS_USERNAME, RDS_PASSWORD, RDS_HOSTNAME, RDS_PORT
+RDS_DB_NAME, RDS_USERNAME, RDS_PASSWORD, RDS_HOSTNAME, RDS_PORT, SECRET_KEY
+
+
 
 Be sure to use a different RDS_DB_NAME for staging and production.
 

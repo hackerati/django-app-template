@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -37,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'app',
     'temp',
 )
@@ -130,7 +130,39 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+
+#######################################################################
+# SETTINGS FOR STATIC FILE STORAGE
+
+from storages.backends.s3boto import S3BotoStorage
+
+# Headers can be set here which will be used when AWS serves
+# your static files.
+# AWS_HEADERS = {}
+AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = '{0}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
+
+STATICFILES_LOCATION = os.environ.get('STATICFILES_LOCATION')
+STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+#######################################################################
+# SETTINGS FOR MEDIA FILE STORAGE
+
+MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
+MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+
+
+class StaticStorage(S3BotoStorage):
+    location = STATICFILES_LOCATION
+
+
+class MediaStorage(S3BotoStorage):
+    location = MEDIAFILES_LOCATION
+
+
+STATICFILES_STORAGE = 'app.settings.StaticStorage'
+DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
+#######################################################################

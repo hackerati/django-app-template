@@ -10,6 +10,9 @@ appsvr:
   environment:
     - DEBUG=True
     - SECRET_KEY=B6LyzKZ$"D64&,CawS0_F<o'8"ixxglSE91|@?opd}/J\/dTodBQUVUkq-H*<?AXWI_.EYo18q05H:]+i'^NvXJL:(*YL$TqKE!l
+    - MEDIAFILES_LOCATION=development/media/
+    - STATICFILES_LOCATION=development/static/
+    - S3_BUCKET_NAME=django-app-template-static/
   command: bash -c "python /src/app/manage.py migrate && uwsgi --ini /src/app/uwsgi.ini"
 
 nginx:
