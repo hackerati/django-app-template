@@ -166,8 +166,8 @@ MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #ENVIRONMENT = os.environ.get('ENVIRONMENT')
-#DEBUG = True 
 #if ENVIRONMENT == 'development':
+#    DEBUG = True 
 #    STATIC_URL = '/static/'
 #else:
 #    STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
@@ -177,4 +177,3 @@ MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 #######################################################################
 
 STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-DEBUG = True 
