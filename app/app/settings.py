@@ -152,7 +152,13 @@ import sys
 print 'PYTHON LOCATION:'
 print sys.executable
 
-from storages.backends.s3boto import S3BotoStorage
+try:
+    from storages.backends.s3boto import S3BotoStorage
+except:
+    print 'could not import'
+    import pip
+    pip.main(['freeze'])
+    raise
 
 
 class StaticStorage(S3BotoStorage):
