@@ -180,5 +180,4 @@ if ENVIRONMENT == 'development':
 else:
     STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
     MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
-    DEBUG = True
 #######################################################################
