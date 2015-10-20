@@ -169,7 +169,9 @@ try:
         DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
 
 except ImportError:
-    pass
+    INSTALLED_APPS = list(INSTALLED_APPS)
+    INSTALLED_APPS.remove('storages')
+    INSTALLED_APPS = tuple(INSTALLED_APPS)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if ENVIRONMENT == 'development':
