@@ -149,10 +149,10 @@ MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 #######################################################################
 # CREATE CLASSES FOR STATIC AND MEDIAFILE STORAGE
 
-import sys, os
+import sys, getpass
 print 'PYTHON LOCATION:'
 print sys.executable
-print 'User: {}'.format(os.getlogin())
+print 'User: {}'.format(getpass.getuser())
 
 try:
     from storages.backends.s3boto import S3BotoStorage
