@@ -4,9 +4,10 @@ ENV PYTHONUNBUFFERED 1
 # Install Python dependencies
 RUN mkdir -p /src/app/
 COPY requirements.txt /src/app/
-RUN pip install -r /src/app/requirements.txt
+RUN virtualenv /src/app/env
+RUN /src/app/env/bin/pip install -r /src/app/requirements.txt
 
 # Ensure we have django user with which uwsgi will run.
 RUN useradd -ms /bin/bash django
 
-CMD uwsgi --ini /src/app/uwsgi.ini
+CMD /src/app/bin/uwsgi --ini /src/app/uwsgi.ini
