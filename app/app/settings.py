@@ -149,44 +149,32 @@ MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 #######################################################################
 # CREATE CLASSES FOR STATIC AND MEDIAFILE STORAGE
 
-import sys, getpass
-print 'PYTHON LOCATION:'
-print sys.executable
-print 'User: {}'.format(getpass.getuser())
+ENVIRONMENT = os.environ.get('ENVIRONMENT')
 
 try:
     from storages.backends.s3boto import S3BotoStorage
-except:
-    print 'could not import'
-    print 'User: {}'.format(getpass.getuser())
-    import pip
-    pip.main(['freeze'])
-    try:
-        from storages.backends.s3.s3boto import S3BotoStorage
-    except:
-        raise
 
+    class StaticStorage(S3BotoStorage):
+        def __init__(self, *args, **kwargs):
+            super(StaticStorage, self).__init__(*args, **kwargs)
+            self.location = STATICFILES_LOCATION
 
-class StaticStorage(S3BotoStorage):
-    def __init__(self, *args, **kwargs):
-        super(StaticStorage, self).__init__(*args, **kwargs)
-        self.location = STATICFILES_LOCATION
+    class MediaStorage(S3BotoStorage):
+        def __init__(self, *args, **kwargs):
+            super(MediaStorage, self).__init__(*args, **kwargs)
+            self.location = MEDIAFILES_LOCATION
 
+    if ENVIRONMENT != 'development':
+        STATICFILES_STORAGE = 'app.settings.StaticStorage'
+        DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
 
-class MediaStorage(S3BotoStorage):
-    def __init__(self, *args, **kwargs):
-        super(MediaStorage, self).__init__(*args, **kwargs)
-        self.location = MEDIAFILES_LOCATION
-
+except ImportError:
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ENVIRONMENT = os.environ.get('ENVIRONMENT')
 if ENVIRONMENT == 'development':
     DEBUG = True 
     STATIC_URL = '/static/'
 else:
     STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
     MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
-    STATICFILES_STORAGE = 'app.settings.StaticStorage'
-    DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
 #######################################################################
