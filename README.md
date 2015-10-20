@@ -355,7 +355,9 @@ In addition to database-related environment variables, you should also generate 
 one for your staging environment, and one for production, and set these here.
 The environment variables can be set on the Elastic Beanstalk console for each environment by going to Configuration > Software Configuration.
 In here you must set the following environment variables:
-RDS_DB_NAME, RDS_USERNAME, RDS_PASSWORD, RDS_HOSTNAME, RDS_PORT, SECRET_KEY
+RDS_DB_NAME, RDS_USERNAME, RDS_PASSWORD, RDS_HOSTNAME, RDS_PORT, SECRET_KEY,
+ALLOWED_HOST, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_S3_CUSTOM_DOMAIN,
+ENVIRONMENT, MEDIAFILES_LOCATION, S3_BUCKET_NAME, STATICFILES_LOCATION
 
 
 
