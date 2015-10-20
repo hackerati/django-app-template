@@ -169,6 +169,7 @@ try:
         DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
 
 except ImportError:
+    pass
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if ENVIRONMENT == 'development':
