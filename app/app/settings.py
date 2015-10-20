@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'app',
     'temp',
 )
@@ -148,14 +149,16 @@ MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 #######################################################################
 # CREATE CLASSES FOR STATIC AND MEDIAFILE STORAGE
 
-import sys
+import sys, os
 print 'PYTHON LOCATION:'
 print sys.executable
+print 'User: {}'.format(os.getlogin())
 
 try:
     from storages.backends.s3boto import S3BotoStorage
 except:
     print 'could not import'
+    print 'User: {}'.format(os.getlogin())
     import pip
     pip.main(['freeze'])
     raise
