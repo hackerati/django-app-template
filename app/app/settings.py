@@ -35,7 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'storages',
     'app',
-    'temp',
+    'sample_app',
 )
 
 MIDDLEWARE_CLASSES = (

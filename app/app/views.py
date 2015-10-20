@@ -2,7 +2,7 @@ from time import time
 
 from django.shortcuts import render
 
-from temp.models import Temp
+from sample_app.models import Temp
 
 
 def home(request):
