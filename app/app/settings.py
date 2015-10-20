@@ -158,10 +158,13 @@ try:
     from storages.backends.s3boto import S3BotoStorage
 except:
     print 'could not import'
-    print 'User: {}'.format(os.getlogin())
+    print 'User: {}'.format(getpass.getuser())
     import pip
     pip.main(['freeze'])
-    raise
+    try:
+        from storages.backends.s3.s3boto import S3BotoStorage
+    except:
+        raise
 
 
 class StaticStorage(S3BotoStorage):
