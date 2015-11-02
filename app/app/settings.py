@@ -151,6 +151,9 @@ MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT')
 
+# I have encapsulated all this in a try block, because for some reason
+# django-storages won't run in EB when the server is started using
+# uWSGI. This needs to be solved somehow.
 try:
     from storages.backends.s3boto import S3BotoStorage
 
@@ -164,7 +167,7 @@ try:
             super(MediaStorage, self).__init__(*args, **kwargs)
             self.location = MEDIAFILES_LOCATION
 
-    if ENVIRONMENT != 'development':
+    if ENVIRONMENT not in ['development', 'debug']:
         STATICFILES_STORAGE = 'app.settings.StaticStorage'
         DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
 
@@ -174,10 +177,11 @@ except ImportError:
     INSTALLED_APPS = tuple(INSTALLED_APPS)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if ENVIRONMENT == 'development':
+# (Or staging, really.)
+if ENVIRONMENT in ['development', 'debug']:
     DEBUG = True 
     STATIC_URL = '/static/'
-           
+
 else:
     AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN')
     STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)

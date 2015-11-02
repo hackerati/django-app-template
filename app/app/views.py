@@ -13,6 +13,8 @@ def home(request):
     return render(request, "home.html", {'models':models})
 
 
+# This block of code checks for changes to your code every five seconds
+# and reloads the app if there are changes. This only runs in dev mode.
 if settings.ENVIRONMENT == 'development':
     import uwsgi
     from uwsgidecorators import timer

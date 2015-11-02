@@ -3,3 +3,4 @@ Django
 django-storages
 psycopg2
 uWSGI
+ipdb
