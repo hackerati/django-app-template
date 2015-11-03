@@ -1,12 +1,8 @@
 from django.db import models
 
 # Create your models here.
-class Temp(models.Model):
-    text_field = models.CharField(max_length=100)
+class PageLoad(models.Model):
+    datetime_stamp = models.DateTimeField(auto_now_add=True)
 
-    def serialize(self):
-        return {
-                'text_field':self.text_field,
-                'id':self.id
-                }
-
+    def format_datetime(self):
+        return self.datetime_stamp.strftime("%Y/%m/%d at %H:%M:%S")

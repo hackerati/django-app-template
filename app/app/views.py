@@ -1,16 +1,20 @@
-from time import time
-
+"""
+This is a very simple sample app which keeps track of the timestamps
+for each time that the main page is loaded, and then displays them
+on the page. It's sole purpose at the moment is to show the user that
+the database is correctly configured and connected to the app.
+"""
 from django.shortcuts import render
 from django.conf import settings
 
-from sample_app.models import Temp
+from sample_app.models import PageLoad
 
 
 def home(request):
-    temp = Temp(text_field=str(time()))
-    temp.save()
-    models = [model.serialize() for model in Temp.objects.all()]
-    return render(request, "home.html", {'models':models})
+    page_load = PageLoad()
+    page_load.save()
+    page_loads = [model.format_datetime() for model in PageLoad.objects.all()]
+    return render(request, "home.html", {'page_loads':page_loads})
 
 
 # This block of code checks for changes to your code every five seconds
