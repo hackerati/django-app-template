@@ -1,31 +1,27 @@
 UNAME := $(shell uname)
+ifeq ($(UNAME),"Darwin")
+OSX := 1
+endif
 
-ifeq ($(UNAME),Darwin)
-OS := osx
-VAGRANT := $(shell { type vagrant } 2>/dev/null)
 
-ifeq ($(UNAME),Linux)
-@echo linux
-OS := linux
-DOCKER := $(shell { type docker } 2>/dev/null)
-DOCKER_COMPOSE := $(shell { type docker-compose } 2>/dev/null)
-SHORT_APP_SERVER_ID := $(shell { docker ps | grep appsvr | awk -F ' ' '{print $1}'; } 2>/dev/null)
+VAGRANT := $(shell { type vagrant; } 2>/dev/null)
+VAGRANT_DOCKER_COMPOSE := $(shell { vagrant plugin list | grep vagrant-docker-compose; } 2>/dev/null)
+DOCKER := $(shell { type docker; } 2>/dev/null)
+DOCKER_COMPOSE := $(shell { type docker-compose; } 2>/dev/null)
+SHORT_APP_SERVER_ID := $(shell { docker ps | grep appsvr | awk -F ' ' '{print $$1}'; } 2>/dev/null)
 ifdef SHORT_APP_SERVER_ID
-FULL_APP_SERVER_ID := $(shell { docker ps --no-trunc -q | grep $short_app_server_id; } 2>/dev/null)
-endif
-
-else
-	@echo "\n\n The Django App Template currently only supports Linux and OSX."
-	@exit 1
-endif
+FULL_APP_SERVER_ID := $(shell { docker ps --no-trunc -q | grep $(SHORT_APP_SERVER_ID); } 2>/dev/null)
 endif
 
 
 .PHONY: build push shell run start stop rm release check
-
+######################################################################
 # COMMANDS FOR USING OSX
-ifeq ($(OSX),1)
-check: check_vagrant check_virtualbox
+#######################################################################
+ifdef OSX
+check: check_vagrant check_virtualbox check_plugins
+
+install: check_vagrant check_virtualbox install_plugins
 
 build:
 	@vagrant provision
@@ -33,8 +29,23 @@ build:
 up:
 	@vagrant up
 
-# COMMANDS FOR RUNNING ON LINUX
+test:
+	@vagrant ssh -c "cd /src/ && make test"
+
+debug:
+	@vagrant ssh -c "cd /src/ && make debug"
+
+shell:
+	@vagrant ssh -c "cd /src/ && make shell"
+
+stop:
+	@vagrant halt
+
+#######################################################################
+# COMMANDS FOR USING LINUX
 else
+#######################################################################
+
 check: check_docker check_docker_compose
 
 build:
@@ -45,14 +56,11 @@ up:
 
 test:
 ifdef FULL_APP_SERVER_ID
-	@echo "its alive"
-	docker exec $(FULL_APP_SERVER_ID) python /src/app/manage.py test
+	@docker exec -i -t $(FULL_APP_SERVER_ID) python /src/app/manage.py test
 else
 	@echo "You must start docker-compose before running tests"
 	@echo "Please run \`make up\`"
 endif
-endif
-
 
 debug:
 	@sed -i s/ports/\#ports/ docker-compose.yml
@@ -63,11 +71,8 @@ debug:
 	@echo "\n\nRunning app in debug mode. See docs for ipdb."
 	@echo "This command changes docker-compose.yml temporarily, do not commit these changes"
 	@echo "To exit debugger use CTRL-D. To shut off server use CTRL-C."
-	ifeq ($(OSX),1)
-		@vagrant ssh 
-	else
-		@docker-compose -f docker-compose.yml run --service-ports appsvr
-	endif
+
+	@docker-compose -f docker-compose.yml run --service-ports appsvr
 
 	@sed -i s/ENVIRONMENT=debug/ENVIRONMENT=development/ docker-compose.yml
 	@sed -i s/"python \/src\/app\/manage.py runserver 0.0.0.0:8000"/"uwsgi \-\-ini \/src\/app\/uwsgi\.ini"/ docker-compose.yml
@@ -76,9 +81,10 @@ debug:
 	@sed -i s/\#ports/ports/ docker-compose.yml
 	@sed -i s/"\#- \"8000:8000\""/"- \"8000:8000\""/ docker-compose.yml
 
-
-
 shell:
+ifdef FULL_APP_SERVER_ID
+	@docker exec -i -t $(FULL_APP_SERVER_ID) bash
+endif
 
 run:
 
@@ -88,6 +94,10 @@ stop:
 
 rm:
 
+#######################################################################
+# GENERAL COMMANDS
+endif
+#######################################################################
 check_vagrant:
 	@echo "Checking whether Vagrant installed... "
 ifdef VAGRANT
@@ -97,7 +107,17 @@ else
 	@exit 1
 endif
 
+check_plugins:
+ifdef VAGRANT_DOCKER_COMPOSE
+	@echo "vagrant-docker-compose installed"
+else
+	@echo "Missing vagrant-docker-compose"
+	@echo "Please run \`make install_plugins\`"
+	@exit 1
+endif
+
 install_plugins:
+	@echo "Installing vagrant-docker-compose"
 	@vagrant plugin install vagrant-docker-compose
 
 check_virtualbox:
