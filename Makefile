@@ -106,10 +106,18 @@ rm:
 	@docker-compose rm
 
 makemigrations:
+ifdef FULL_APP_SERVER_ID
 	@docker exec -i -t $(FULL_APP_SERVER_ID) python /src/app/manage.py makemigrations
+else
+	@echo "Must be running Application Server to make migrations"
+endif
 
 migrate:
+ifdef FULL_APP_SERVER_ID
 	@docker exec -i -t $(FULL_APP_SERVER_ID) python /src/app/manage.py migrate
+else
+	@echo "Must be running Application Server to migrate database"
+endif
 
 
 #######################################################################

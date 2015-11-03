@@ -211,6 +211,16 @@ To rebuild a container after changing a Dockerfile:
 $ make build
 ```
 
+To run in debug mode, using your favorite Python debug tool (ipdb included by default):
+```bash
+$ make debug
+```
+
+To run your suite of tests:
+```bash
+$ make test
+```
+
 ## Setting Up Your Project
 
 ### Setting Up Your Own Repo
