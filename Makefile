@@ -1,9 +1,10 @@
 UNAME := $(shell uname)
-ifeq ($(UNAME),"Darwin")
+ifeq ($(UNAME),Darwin)
 OSX := 1
 endif
 
 
+VIRTUALBOX := $(shell { type virtualbox; } 2>/dev/null)
 VAGRANT := $(shell { type vagrant; } 2>/dev/null)
 VAGRANT_DOCKER_COMPOSE := $(shell { vagrant plugin list | grep vagrant-docker-compose; } 2>/dev/null)
 DOCKER := $(shell { type docker; } 2>/dev/null)
@@ -24,7 +25,7 @@ check: check_vagrant check_virtualbox check_plugins
 install: check_vagrant check_virtualbox install_plugins
 
 build:
-	@vagrant provision
+	@vagrant up --provision
 
 up:
 	@vagrant up
@@ -34,6 +35,7 @@ test:
 
 debug:
 	@vagrant ssh -c "cd /src/ && make debug"
+	@vagrant halt
 
 shell:
 	@vagrant ssh -c "cd /src/ && make shell"
@@ -63,6 +65,9 @@ else
 endif
 
 debug:
+ifdef FULL_APP_SERVER_ID
+	@docker-compose kill
+endif
 	@sed -i s/ports/\#ports/ docker-compose.yml
 	@sed -i s/"- \"8000:8000\""/"\#- \"8000:8000\""/ docker-compose.yml
 	@sed -i s/ENVIRONMENT=development/ENVIRONMENT=debug/ docker-compose.yml
@@ -86,13 +91,8 @@ ifdef FULL_APP_SERVER_ID
 	@docker exec -i -t $(FULL_APP_SERVER_ID) bash
 endif
 
-run:
-
-start:
-
 stop:
-
-rm:
+	@docker-compose kill
 
 #######################################################################
 # GENERAL COMMANDS
@@ -108,8 +108,9 @@ else
 endif
 
 check_plugins:
+	@echo "Checking whether vagrant-docker-compose installed... "
 ifdef VAGRANT_DOCKER_COMPOSE
-	@echo "vagrant-docker-compose installed"
+	@echo "YES"
 else
 	@echo "Missing vagrant-docker-compose"
 	@echo "Please run \`make install_plugins\`"
