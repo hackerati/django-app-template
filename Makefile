@@ -43,6 +43,12 @@ shell:
 stop:
 	@vagrant halt
 
+makemigrations:
+	@vagrant ssh -c "cd /src/ && make makemigrations"
+
+migrate:
+	@vagrant ssh -c "cd /src/ && make migrate"
+
 #######################################################################
 # COMMANDS FOR USING LINUX
 else
@@ -66,7 +72,7 @@ endif
 
 debug:
 ifdef FULL_APP_SERVER_ID
-	@docker-compose kill
+	@docker-compose stop
 endif
 	@sed -i s/ports/\#ports/ docker-compose.yml
 	@sed -i s/"- \"8000:8000\""/"\#- \"8000:8000\""/ docker-compose.yml
@@ -89,10 +95,22 @@ endif
 shell:
 ifdef FULL_APP_SERVER_ID
 	@docker exec -i -t $(FULL_APP_SERVER_ID) bash
+else
+	@echo "Must be running Application Server to get shell access."
 endif
 
 stop:
-	@docker-compose kill
+	@docker-compose stop
+
+rm:
+	@docker-compose rm
+
+makemigrations:
+	@docker exec -i -t $(FULL_APP_SERVER_ID) python /src/app/manage.py makemigrations
+
+migrate:
+	@docker exec -i -t $(FULL_APP_SERVER_ID) python /src/app/manage.py migrate
+
 
 #######################################################################
 # GENERAL COMMANDS

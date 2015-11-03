@@ -26,8 +26,8 @@ Now you can start the environment:
 ```bash
 $ git clone git@github.com:thehackerati/django-app-template.git
 $ cd django-app-template
-$ vagrant plugin install vagrant-docker-compose
-$ vagrant up
+$ make install
+$ make up
 ```
 
 You'll be prompted to login using an account with admin privileges on your host machine to enable network synchronization of the source tree on your host machine with the Vagrant VM.
@@ -87,8 +87,8 @@ At this point, you can clone the repo and start the Docker containers:
 ```bash
 $ git clone git@github.com:thehackerati/django-app-template.git
 $ cd django-app-template
-$ docker-compose build
-$ docker-compose up
+$ make build
+$ make up
 ```
 
 You might see the following error message when attempting to start the containers:
@@ -101,7 +101,7 @@ If that is the case, kill all processes using that address and try starting the 
 
 ```bash
 $ sudo fuser -k 80/tcp
-$ docker-compose up
+$ make up
 ```
 
 You might additionally see the following error message:
@@ -113,9 +113,9 @@ Conflict. The name "djangoapptemplate_nginx_1" is already in use by container <c
 If that is the case, stop and remove all containers and restart:
 
 ```bash
-$ docker-compose stop
-$ docker-compose rm
-$ docker-compose up
+$ make stop
+$ make rm
+$ make up
 ```
 
 Once the Docker containers have started, check out the app:
@@ -202,13 +202,13 @@ $ vagrant ssh -c 'docker logs -f djangoapptemplate_nginx_1'
 To open a shell in your Docker container
 
 ```bash
-$ vagrant ssh -c 'docker exec -i -t djangoapptemplate_appsvr_1 bash'
+$ make shell
 ```
 
 To rebuild a container after changing a Dockerfile:
 
 ```bash
-$ TODO
+$ make build
 ```
 
 ## Setting Up Your Project
@@ -367,13 +367,13 @@ Be sure to use a different RDS_DB_NAME for staging and production.
 #### Migrating the database
 In order to create migrations on your development environment you will need to run:
 ```bash
-$ docker-compose run appsvr python /src/app/manage.py makemigrations
+$ make makemigrations
 ```
 
 You must do this while the environment is running.
 Then you can run:
 ```bash
-docker-compose run appsvr python /src/app/manage.py migrate
+$ make migrate
 ```
 This will apply the migrations to the database.
 When you are ready to deploy, you must be sure to check your migrations into your repository.
