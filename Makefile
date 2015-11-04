@@ -64,7 +64,7 @@ up:
 
 test:
 ifdef FULL_APP_SERVER_ID
-	@docker exec -i -t $(FULL_APP_SERVER_ID) python /src/app/manage.py test
+	@docker exec -i -t $(FULL_APP_SERVER_ID) bash -c "cd /src/app/ && python /src/app/manage.py test"
 else
 	@echo "You must start docker-compose before running tests"
 	@echo "Please run \`make up\`"
