@@ -183,20 +183,20 @@ Here are some useful Docker commands that you can run from your host, assuming y
 To ssh to your VM (it's just a Linux host):
 
 ```bash
-$ vagrant ssh
+$ make ssh
 ```
 
 To show the Docker containers that are currently running:
 
 ```bash
-$ vagrant ssh -c 'docker ps'
+$ make ps
 ```
 
 To tail the log files from your containers:
 
 ```bash
-$ vagrant ssh -c 'docker logs -f djangoapptemplate_appsvr_1'
-$ vagrant ssh -c 'docker logs -f djangoapptemplate_nginx_1'
+$ make tail
+$ make tailnginx
 ```
 
 To open a shell in your Docker container
@@ -219,6 +219,11 @@ $ make debug
 To run your suite of tests:
 ```bash
 $ make test
+```
+
+To get a shell inside the Django app (as in running `python manage.py shell):
+```bash
+$ make djangoshell
 ```
 
 ## Setting Up Your Project

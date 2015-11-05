@@ -13,6 +13,10 @@ SHORT_APP_SERVER_ID := $(shell { docker ps | grep appsvr | awk -F ' ' '{print $$
 ifdef SHORT_APP_SERVER_ID
 FULL_APP_SERVER_ID := $(shell { docker ps --no-trunc -q | grep $(SHORT_APP_SERVER_ID); } 2>/dev/null)
 endif
+SHORT_NGINX_SERVER_ID := $(shell { docker ps | grep nginx | awk -F ' ' '{print $$1}'; } 2>/dev/null)
+ifdef SHORT_NGINX_SERVER_ID
+FULL_NGINX_SERVER_ID := $(shell { docker ps --no-trunc -q | grep $(SHORT_NGINX_SERVER_ID); } 2>/dev/null)
+endif
 
 
 .PHONY: build push shell run start stop rm release check
@@ -24,7 +28,10 @@ check: check_vagrant check_virtualbox check_plugins
 
 install: check_vagrant check_virtualbox install_plugins
 
-build:
+build: up
+	@vagrant ssh -c "cd /src/ && make build"
+
+provision:
 	@vagrant up --provision
 
 up:
@@ -40,6 +47,9 @@ debug:
 shell:
 	@vagrant ssh -c "cd /src/ && make shell"
 
+djangoshell:
+	@vangrant ssh -c "cd /src/ && make djangoshell"
+
 stop:
 	@vagrant halt
 
@@ -48,6 +58,18 @@ makemigrations:
 
 migrate:
 	@vagrant ssh -c "cd /src/ && make migrate"
+
+ssh:
+	@vagrant ssh
+
+ps:
+	@vagrant ssh -c "cd /src/ && make ps"
+
+tail:
+	@vagrant ssh -c "cd /src/ && make tail"
+
+tailnginx:
+	@vagrant ssh -c "cd /src/ && make tailnginx"
 
 #######################################################################
 # COMMANDS FOR USING LINUX
@@ -99,6 +121,13 @@ else
 	@echo "Must be running Application Server to get shell access."
 endif
 
+djangoshell:
+ifdef FULL_APP_SERVER_ID
+	@docker exec -i -t $(FULL_APP_SERVER_ID) python /src/app/manage.py shell
+else
+	@echo "Must be running Application Server to get shell access."
+endif
+
 stop:
 	@docker-compose stop
 
@@ -119,6 +148,22 @@ else
 	@echo "Must be running Application Server to migrate database"
 endif
 
+ps:
+	@docker ps
+
+tail:
+	@docker logs -f $(FULL_APP_SERVER_ID)
+else
+	@echo "Must be running Application Sever to tail"
+endif
+
+tailnginx:
+ifdef FULL_NGINX_SERVER_ID
+	@docker logs -f $(FULL_NGINX_SERVER_ID)
+else
+	@echo "Must be running Nginx container to tail"
+endif
+
 
 #######################################################################
 # GENERAL COMMANDS
@@ -129,7 +174,7 @@ check_vagrant:
 ifdef VAGRANT
 	@echo "YES"
 else
-	@echo "NO!\n\n\ Please install Vagrant \n\n"
+	@echo "NO! Please install Vagrant"
 	@exit 1
 endif
 
@@ -152,7 +197,7 @@ check_virtualbox:
 ifdef VIRTUALBOX
 	@echo "YES"
 else
-	@echo "NO!\n\n Please install Virtualbox \n\n"
+	@echo "NO! Please install Virtualbox"
 	@exit 1
 endif
 
@@ -161,7 +206,7 @@ check_docker:
 ifdef DOCKER
 	@echo "YES"
 else
-	@echo "NO!\n\n Please install Docker \n\n"
+	@echo "NO! Please install Docker"
 	@exit 1
 endif
 
@@ -170,7 +215,7 @@ check_docker_compose:
 ifdef DOCKER_COMPOSE
 	@echo "YES"
 else
-	@echo "NO!\n\n Please install docker-compose \n\n"
+	@echo "NO! Please install docker-compose"
 	@exit 1
 endif
 

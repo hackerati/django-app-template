@@ -33,4 +33,3 @@ class PageLoadTestCase(TestCase):
         for datetime in datetimes:
             self.assertTrue(now > datetime)
             self.assertLess( (now - datetime).seconds, 60)
-        
