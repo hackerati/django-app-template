@@ -226,6 +226,16 @@ To get a shell inside the Django app (as in running `python manage.py shell):
 $ make djangoshell
 ```
 
+To see usage statistics of the app server container:
+```bash
+make stats
+```
+
+To see the running processes inside the app server:
+```bash
+make top
+```
+
 ## Setting Up Your Project
 
 ### Setting Up Your Own Repo

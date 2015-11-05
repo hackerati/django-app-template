@@ -17,6 +17,7 @@ SHORT_NGINX_SERVER_ID := $(shell { docker ps | grep nginx | awk -F ' ' '{print $
 ifdef SHORT_NGINX_SERVER_ID
 FULL_NGINX_SERVER_ID := $(shell { docker ps --no-trunc -q | grep $(SHORT_NGINX_SERVER_ID); } 2>/dev/null)
 endif
+APP_SERVER_IMAGE_NAME := $(shell { docker ps | grep $(SHORT_APP_SERVER_ID) | awk -F ' ' '{print $2}'; } 2>/dev/null)
 
 
 .PHONY: build push shell run start stop rm release check
@@ -70,6 +71,12 @@ tail:
 
 tailnginx:
 	@vagrant ssh -c "cd /src/ && make tailnginx"
+
+stats:
+	@vagrant ssh -c "cd /src/ && make stats"
+
+top:
+	@vagrant ssh -c "cd /src/ && make top"
 
 #######################################################################
 # COMMANDS FOR USING LINUX
@@ -165,6 +172,19 @@ else
 	@echo "Must be running Nginx container to tail"
 endif
 
+stats:
+ifdef FULL_APP_SERVER_ID
+	@docker stats $(FULL_APP_SERVER_ID)
+else
+	@echo "Must be running Application Sever to see stats"
+endif
+
+top:
+ifdef FULL_APP_SERVER_ID
+	@docker top $(FULL_APP_SERVER_ID)
+else
+	@echo "Must be running Application Sever to see processes"
+endif
 
 #######################################################################
 # GENERAL COMMANDS
