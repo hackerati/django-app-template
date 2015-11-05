@@ -30,7 +30,4 @@ Vagrant.configure("2") do |config|
     # Install Docker, Docker Compose, and stand up the docker environment
     config.vm.provision :docker
     config.vm.provision :docker_compose, yml: "/src/docker-compose.yml", rebuild: true, project_name: "django-app-template", run: "always"
-
-    # Setup aliases
-    config.vm.provision :shell, inline: "/bin/sh /src/aliases.sh"
 end

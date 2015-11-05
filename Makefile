@@ -152,6 +152,7 @@ ps:
 	@docker ps
 
 tail:
+ifdef FULL_APP_SERVER_ID
 	@docker logs -f $(FULL_APP_SERVER_ID)
 else
 	@echo "Must be running Application Sever to tail"
