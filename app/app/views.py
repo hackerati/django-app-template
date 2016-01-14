@@ -4,6 +4,8 @@ for each time that the main page is loaded, and then displays them
 on the page. It's sole purpose at the moment is to show the user that
 the database is correctly configured and connected to the app.
 """
+import os.environ
+
 from django.shortcuts import render
 from django.conf import settings
 
@@ -19,7 +21,7 @@ def home(request):
 
 # This block of code checks for changes to your code every five seconds
 # and reloads the app if there are changes. This only runs in dev mode.
-if settings.ENVIRONMENT == 'development':
+if settings.ENVIRONMENT == 'development' and 'TRAVIS' not in os.environ:
     import uwsgi
     from uwsgidecorators import timer
     from django.utils import autoreload
