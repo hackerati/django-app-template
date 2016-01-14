@@ -4,7 +4,7 @@ for each time that the main page is loaded, and then displays them
 on the page. It's sole purpose at the moment is to show the user that
 the database is correctly configured and connected to the app.
 """
-import os.environ
+import os
 
 from django.shortcuts import render
 from django.conf import settings
