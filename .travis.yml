@@ -2,7 +2,7 @@ language: python
 services:
   - postgresql
 python:
-  - '3.4'
+  - '2.7'
 addons:
   postgresql: "9.3"
 install:
@@ -10,8 +10,9 @@ install:
   - pip install -r requirements.txt
 before_script:
   - psql -c 'create database travisci;' -U postgres
+  - export ENVIRONMENT=development
   - python manage.py migrate --noinput
-  # - python manage.py collectstatic --noinput # Add STATIC_ROOT to settings
+  - python manage.py collectstatic --noinput # Add STATIC_ROOT to settings
 script:
   - python manage.py test
 

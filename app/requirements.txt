@@ -1,3 +1,6 @@
+boto
 Django
+django-storages
 psycopg2
-uwsgi
+uWSGI
+ipdb

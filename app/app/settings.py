@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -22,10 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST')]
 
 
 # Application definition
@@ -37,8 +33,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'app',
-    'temp',
+    'sample_app',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -130,7 +127,63 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+
+#######################################################################
+# SETTINGS FOR STATIC AND MEDIA FILE STORAGE
+
+# Headers can be set here which will be used when AWS serves
+# your static files.
+AWS_HEADERS = {}
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = '{0}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
+
+STATICFILES_LOCATION = os.environ.get('STATICFILES_LOCATION')
+MEDIAFILES_LOCATION = os.environ.get('MEDIAFILES_LOCATION')
+
+#######################################################################
+# CREATE CLASSES FOR STATIC AND MEDIAFILE STORAGE
+
+ENVIRONMENT = os.environ.get('ENVIRONMENT')
+
+# I have encapsulated all this in a try block, because for some reason
+# django-storages won't run in EB when the server is started using
+# uWSGI. This needs to be solved somehow.
+try:
+    from storages.backends.s3boto import S3BotoStorage
+
+    class StaticStorage(S3BotoStorage):
+        def __init__(self, *args, **kwargs):
+            super(StaticStorage, self).__init__(*args, **kwargs)
+            self.location = STATICFILES_LOCATION
+
+    class MediaStorage(S3BotoStorage):
+        def __init__(self, *args, **kwargs):
+            super(MediaStorage, self).__init__(*args, **kwargs)
+            self.location = MEDIAFILES_LOCATION
+
+    if ENVIRONMENT not in ['development', 'debug']:
+        STATICFILES_STORAGE = 'app.settings.StaticStorage'
+        DEFAULT_FILE_STORAGE = 'app.settings.MediaStorage'
+
+except ImportError:
+    INSTALLED_APPS = list(INSTALLED_APPS)
+    INSTALLED_APPS.remove('storages')
+    INSTALLED_APPS = tuple(INSTALLED_APPS)
+
+# SECURITY WARNING: don't run with debug turned on in production!
+# (Or staging, really.)
+if ENVIRONMENT in ['development', 'debug']:
+    DEBUG = True 
+    STATIC_URL = '/static/'
+
+else:
+    AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN')
+    STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+    MEDIA_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+#######################################################################

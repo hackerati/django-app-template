@@ -20,6 +20,14 @@
     Happy hacking :]
 </p>
 <p>
-    Models: {{models}}
+  <div class="page_load_list">
+
+    {% for page_load in page_loads %}
+    <div class="page_load">
+        Page loaded on: {{ page_load }}
+    </div>
+    {% endfor %}
+
+  </div>
 </p>
 {% endblock content %}
