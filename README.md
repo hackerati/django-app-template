@@ -414,12 +414,5 @@ Type        Name        Dockerfile Location     Tag Name
 Branch      staging     /app                    staging-latest
 Branch      master      /app                    latest
 
-TODO:
-get staging to pull staging docker build
-decouple builds from code pushing - separate process
-
-as I feared the old code is present at time of migration.
-
-
 ## License
 Copyright (c) 2015 The Hackerati. This software is licensed under the MIT License.
