@@ -1,4 +1,4 @@
-# django-app-template
+ # django-app-template
 
 [![Build Status](https://travis-ci.org/thehackerati/django-app-template.svg?branch=master)](https://travis-ci.org/thehackerati/django-app-template)
 

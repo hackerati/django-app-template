@@ -86,8 +86,7 @@ if 'RDS_DB_NAME' in os.environ:
     }
 elif 'TRAVIS' in os.environ:
     # Must set secret key here for Travis build to use
-    SECRET_KEY = '^`Yc;488q=gO:5]5p0q$tXOk[P>qo/iL-7cx>.tyh@|wELyXrZ_9#'\
-            '0<B&:+-m>@AY!2v>Me:=LOVTMiSN:xK({bPz;\\&mBDB`(Q'
+    SECRET_KEY = "" ## SECRET_KEY
     DATABASES = {
         'default': {
             'ENGINE':   'django.db.backends.postgresql_psycopg2',
@@ -179,7 +178,7 @@ except ImportError:
 # SECURITY WARNING: don't run with debug turned on in production!
 # (Or staging, really.)
 if ENVIRONMENT in ['development', 'debug']:
-    DEBUG = True 
+    DEBUG = True
     STATIC_URL = '/static/'
 
 else:

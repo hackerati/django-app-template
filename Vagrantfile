@@ -14,10 +14,14 @@ Vagrant.configure("2") do |config|
     config.vm.provision :shell, inline: "apt-get update"
 
     # Install Ruby dev, which gem needs
-    config.vm.provision :shell, inline: "apt-get install -y ruby-dev"
+    config.vm.provision :shell, inline: "sudo apt-get install python-software-properties"
+    config.vm.provision :shell, inline: "sudo apt-add-repository ppa:brightbox/ruby-ng"
+    config.vm.provision :shell, inline: "sudo apt-get update"
+    config.vm.provision :shell, inline: "sudo apt-get -y install ruby2.2 ruby2.2-dev ruby-switch"
+    config.vm.provision :shell, inline: "sudo ruby-switch --set ruby2.2"
 
     # Install travis CLI
-    config.vm.provision :shell, inline: "gem install travis -v 1.8.0 --no-rdoc --no-ri"
+    config.vm.provision :shell, inline: "gem install travis --no-rdoc --no-ri"
     config.vm.provision :shell, inline: "gem install travis-lint --no-rdoc --no-ri"
 
     # Install PIP
