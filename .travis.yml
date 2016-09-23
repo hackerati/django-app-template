@@ -21,9 +21,9 @@ before_deploy: cd ..
 deploy:
   # Deploy master branch to production environment on merge (or push)
   - provider: elasticbeanstalk
-    access_key_id: ## ACCESS KEY ID
+    access_key_id: AKIAIKI74LODOS5L3GRQ
     secret_access_key:
-      secure: ## SECRET ACCESS KEY
+      secure: e7AZ667JoDdzYjjgeLRax3SGGkeLy20zucW/RFBrwAWdz0C++Xqk748cRe06EOIS+elK6xvBBOJyOh5V59o1JqIq6jGzODlC+s+zHfIwwDbg2u66CP10ULknxS94MuyKI9ZBimTAoL13bjgPhGJT8PUQY+RSwr1ca6IGHr9eN9QJ7VcHd1fcCfkrOuikOMAcBH/JGsT7vuAUilybhbuxiNYU8kJwlWfe8I8i3tjnDvFDNUriTplwSCkIzUKGj2PkQuX55c2wDf5p8A1N8jrQwG+TUFdjkpAxwFJsS9Tjkutsuk7jj4FicGQV2NHu7puXmcUTPERWPRDvVro4aMHVIqr36LoexbUfmuF8oByTLTQdQLeb4odcdDdYtp1kSmx5tmKJrlqkRqq70Aj9GjIu+Yod57Bq2+PyjmUHaw6w6EPvnapEOzvEv2MAM0kwcPHr+r0xlYbaZnI75Z9UPzdbkvyyLyA4i+Uvh9+qDzbPL3iFIGEjOIbQjn/6qd9H1UD8mUpT9c9Q0IMrd+vpAsUpikvLcATqSHn/kQ3eEowLa7M0cnScdXycadXaxjFZaV0x6eHE8Lk/UHbpa2HpXSTJd9AA1KHyM24hRgoTt7JEhc6qwj55E4CTbT9wrkyR8aIG2PG8Qre+ZynA/Uu5N3gsuC/e4DyoZ4GlOvIsemoSdkU=
     region: us-east-1
     app: django-app-template
     env: djangoAppTemplateProd
@@ -36,9 +36,9 @@ deploy:
 
   # Deploy staging branch to staging environment on merge (or push)
   - provider: elasticbeanstalk
-    access_key_id: ## ACCESS KEY ID
+    access_key_id: AKIAIKI74LODOS5L3GRQ
     secret_access_key:
-      secure: ## SECRET ACCESS KEY
+      secure: e7AZ667JoDdzYjjgeLRax3SGGkeLy20zucW/RFBrwAWdz0C++Xqk748cRe06EOIS+elK6xvBBOJyOh5V59o1JqIq6jGzODlC+s+zHfIwwDbg2u66CP10ULknxS94MuyKI9ZBimTAoL13bjgPhGJT8PUQY+RSwr1ca6IGHr9eN9QJ7VcHd1fcCfkrOuikOMAcBH/JGsT7vuAUilybhbuxiNYU8kJwlWfe8I8i3tjnDvFDNUriTplwSCkIzUKGj2PkQuX55c2wDf5p8A1N8jrQwG+TUFdjkpAxwFJsS9Tjkutsuk7jj4FicGQV2NHu7puXmcUTPERWPRDvVro4aMHVIqr36LoexbUfmuF8oByTLTQdQLeb4odcdDdYtp1kSmx5tmKJrlqkRqq70Aj9GjIu+Yod57Bq2+PyjmUHaw6w6EPvnapEOzvEv2MAM0kwcPHr+r0xlYbaZnI75Z9UPzdbkvyyLyA4i+Uvh9+qDzbPL3iFIGEjOIbQjn/6qd9H1UD8mUpT9c9Q0IMrd+vpAsUpikvLcATqSHn/kQ3eEowLa7M0cnScdXycadXaxjFZaV0x6eHE8Lk/UHbpa2HpXSTJd9AA1KHyM24hRgoTt7JEhc6qwj55E4CTbT9wrkyR8aIG2PG8Qre+ZynA/Uu5N3gsuC/e4DyoZ4GlOvIsemoSdkU=
     region: us-east-1
     app: django-app-template
     env: djangoAppTemplateStg
@@ -48,3 +48,4 @@ deploy:
     on:
       repo: thehackerati/django-app-template
       branch: staging
+
