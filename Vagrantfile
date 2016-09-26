@@ -7,6 +7,10 @@ Vagrant.configure("2") do |config|
     config.vm.network "private_network", ip: "192.168.59.103"
     config.vm.synced_folder ".", "/src"
 
+    config.vm.provider "virtualbox" do |vb|
+      vb.customize ['modifyvm', :id, "--natdnshostresolver1", "on"]
+    end
+
     # Enable ssh forward agent
     config.ssh.forward_agent = true
 
